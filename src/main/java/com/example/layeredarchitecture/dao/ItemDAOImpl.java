@@ -37,14 +37,18 @@ public class ItemDAOImpl implements ItemDAO {
         pstm.executeUpdate();
     }
 
-    public void updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public boolean updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
         pstm.setString(1, description);
         pstm.setBigDecimal(2, unitPrice);
         pstm.setInt(3, qtyOnHand);
         pstm.setString(4, code);
-        pstm.executeUpdate();
+
+        if (pstm.executeUpdate() > 0) {
+            return true;
+        }
+        return false;
     }
 
     public void deleteItem(String code) throws SQLException, ClassNotFoundException {
@@ -71,6 +75,22 @@ public class ItemDAOImpl implements ItemDAO {
         } else {
             return "I00-001";
         }
+    }
+
+    public ItemDTO findItem(String newItemCode) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
+        pstm.setString(1, newItemCode + "");
+        ResultSet rst = pstm.executeQuery();
+        rst.next();
+
+        ItemDTO item = new ItemDTO(
+                rst.getString("code"),
+                rst.getString("description"),
+                rst.getBigDecimal("unitPrice"),
+                rst.getInt("qtyOnHand"));
+
+        return item;
     }
 
 }

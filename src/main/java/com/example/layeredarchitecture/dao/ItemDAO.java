@@ -12,7 +12,7 @@ public interface ItemDAO {
 
     void saveItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException;
 
-    void updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException;
+    boolean updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException;
 
     void deleteItem(String code) throws SQLException, ClassNotFoundException;
 
