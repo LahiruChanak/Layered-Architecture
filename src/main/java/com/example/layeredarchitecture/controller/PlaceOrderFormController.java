@@ -51,7 +51,7 @@ public class PlaceOrderFormController {
     private String orderId;
 
     CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    ItemDAOImpl itemDAO = new ItemDAOImpl();
+    ItemDAOImpl  itemDAO = new ItemDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
 
