@@ -20,4 +20,5 @@ public interface CustomerDAO {
 
     String generateNewCustomerId() throws SQLException, ClassNotFoundException;
 
+
 }
