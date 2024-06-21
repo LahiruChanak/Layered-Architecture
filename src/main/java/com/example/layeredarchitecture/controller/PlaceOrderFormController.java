@@ -1,5 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.custom.CustomerBO;
+import com.example.layeredarchitecture.bo.custom.ItemBO;
+import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
+import com.example.layeredarchitecture.bo.custom.impl.CustomerBOImpl;
+import com.example.layeredarchitecture.bo.custom.impl.ItemBOImpl;
+import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
@@ -56,10 +62,9 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
 
-    CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    ItemDAOImpl itemDAO = new ItemDAOImpl();
-    OrderDAO orderDAO = new OrderDAOImpl();
-    OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+    CustomerBO customerBO = new CustomerBOImpl();
+    ItemBO itemBO = new ItemBOImpl();
+    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -107,12 +112,12 @@ public class PlaceOrderFormController {
                     /*Search Customer*/
 
                     try {
-                        if (!customerDAO.exist(newValue + "")) {
+                        if (!customerBO.exist(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
 
-                        CustomerDTO customerDTO =customerDAO.search(newValue);
+                        CustomerDTO customerDTO =customerBO.search(newValue);
 
                         if (customerDTO != null) {
                             txtCustomerName.setText(customerDTO.getName());
@@ -140,11 +145,11 @@ public class PlaceOrderFormController {
 
                 //Find Item
                 try {
-                    if (!itemDAO.exist(newItemCode + "")) {
+                    if (!itemBO.exist(newItemCode + "")) {
                         //throw new NotFoundException("There is no such item associated with the id " + code);
                     }
 
-                    ItemDTO itemDTO = itemDAO.search(newItemCode);
+                    ItemDTO itemDTO = itemBO.search(newItemCode);
 
                     txtDescription.setText(itemDTO.getDescription());
                     txtUnitPrice.setText(itemDTO.getUnitPrice().setScale(2).toString());
@@ -190,7 +195,7 @@ public class PlaceOrderFormController {
 
     public String generateNewOrderId() {
         try {
-            return orderDAO.generateNewId();
+            return placeOrderBO.generateNewId();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
         } catch (ClassNotFoundException e) {
@@ -323,12 +328,12 @@ public class PlaceOrderFormController {
         try {
             connection = DBConnection.getDbConnection().getConnection();
 
-            if (orderDAO.exist(orderId)) {
+            if (placeOrderBO.exist(orderId)) {
 
             }
             connection.setAutoCommit(false);
 
-            boolean isOrderSaved = orderDAO.save(new OrderDTO(orderId,orderDate,customerId));
+            boolean isOrderSaved = placeOrderBO.save(new OrderDTO(orderId,orderDate,customerId));
 
             if (!isOrderSaved) {
                 connection.rollback();
@@ -337,7 +342,7 @@ public class PlaceOrderFormController {
             }
 
             for (OrderDetailDTO detail : orderDetails) {
-                boolean isOrderDetailsSaved = orderDetailDAO.save(detail);
+                boolean isOrderDetailsSaved = placeOrderBO.save(detail);
 
                 if (!isOrderDetailsSaved) {
                     connection.rollback();
@@ -349,7 +354,7 @@ public class PlaceOrderFormController {
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
-                boolean isItemUpdated = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
+                boolean isItemUpdated = itemBO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
 
                 if (!isItemUpdated) {
                     connection.rollback();

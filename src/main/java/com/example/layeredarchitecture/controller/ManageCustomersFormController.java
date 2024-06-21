@@ -141,7 +141,7 @@ public class    ManageCustomersFormController {
         if (btnSave.getText().equalsIgnoreCase("save")) {
             //Save Customer
             try {
-                if (customerBO.exist(id)) {
+                if (existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
                 customerBO.save(new CustomerDTO(id, name, address));
@@ -156,7 +156,7 @@ public class    ManageCustomersFormController {
         } else {
             //Update customer
             try {
-                if (!customerBO.exist(id)) {
+                if (!existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
 
@@ -177,12 +177,17 @@ public class    ManageCustomersFormController {
         btnAddNewCustomer.fire();
     }
 
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+
+        boolean next = customerBO.exist(id);
+        return next;
+    }
 
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         //Delete Customer
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
         try {
-            if (!customerBO.exist(id)) {
+            if (!existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
 
