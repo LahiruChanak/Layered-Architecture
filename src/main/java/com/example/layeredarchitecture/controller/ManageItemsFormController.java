@@ -2,8 +2,6 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.custom.ItemBO;
 import com.example.layeredarchitecture.bo.custom.impl.ItemBOImpl;
-import com.example.layeredarchitecture.dao.custom.ItemDAO;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
@@ -74,12 +72,15 @@ public class ManageItemsFormController {
     private void loadAllItems() {
         tblItems.getItems().clear();
         try {
-            //Get all items
-
             ArrayList<ItemDTO> itemDTOS = itemBO.loadAll();
 
-            for (ItemDTO itemDTO : itemDTOS) {
-                tblItems.getItems().add(new ItemTM(itemDTO.getCode(),itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand()));
+            for (ItemDTO dto : itemDTOS){
+                tblItems.getItems().add(new ItemTM(
+                        dto.getCode(),
+                        dto.getDescription(),
+                        dto.getUnitPrice(),
+                        dto.getQtyOnHand()
+                ));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -132,15 +133,15 @@ public class ManageItemsFormController {
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         //Delete Item
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
+
         try {
-            if (!itemBO.exist(code)) {
+            if (!existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
-
             itemBO.delete(code);
-
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
             tblItems.getSelectionModel().clearSelection();
+
             initUI();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the item " + code).show();
@@ -170,14 +171,13 @@ public class ManageItemsFormController {
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
         BigDecimal unitPrice = new BigDecimal(txtUnitPrice.getText()).setScale(2);
 
-
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
-                if (itemBO.exist(code)) {
+                if (existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
-                //Save Item
 
+                //Save Item
                 itemBO.save(new ItemDTO(code,description,unitPrice,qtyOnHand));
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
 
@@ -188,12 +188,11 @@ public class ManageItemsFormController {
             }
         } else {
             try {
-
-                if (!itemBO.exist(code)) {
+                if (!existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
-                //Update Item
 
+                //Update Item
                 itemBO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
@@ -210,10 +209,14 @@ public class ManageItemsFormController {
         btnAddNewItem.fire();
     }
 
+    private boolean existItem(String code) throws SQLException, ClassNotFoundException {
+        boolean exist = itemBO.exist(code);
+        return exist;
+    }
+
     private String generateNewId() {
         try {
             return itemBO.generateNewId();
-
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         } catch (ClassNotFoundException e) {
@@ -221,4 +224,5 @@ public class ManageItemsFormController {
         }
         return "I00-001";
     }
+
 }
