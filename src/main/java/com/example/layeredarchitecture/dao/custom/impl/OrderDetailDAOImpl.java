@@ -10,18 +10,19 @@ import java.util.ArrayList;
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     @Override
-    public ArrayList<OrderDetailDTO> loadAll() throws SQLException, ClassNotFoundException {
-        return null;
-    }
+    public boolean save(OrderDetailDTO dto ) throws SQLException, ClassNotFoundException {
 
-    @Override
-    public boolean save(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)",
-                dto.getOrderId(),
+                dto.getOid(),
                 dto.getItemCode(),
                 dto.getUnitPrice(),
                 dto.getQty()
         );
+    }
+
+    @Override
+    public ArrayList<OrderDetailDTO> loadAll() throws SQLException, ClassNotFoundException {
+        return null;
     }
 
     @Override
@@ -30,9 +31,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     }
 
     @Override
-    public boolean exist(String id) throws SQLException, ClassNotFoundException {
-        return false;
-    }
+    public void delete(String id) throws SQLException, ClassNotFoundException {}
 
     @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
@@ -40,12 +39,12 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     }
 
     @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public OrderDetailDTO search(String id) throws SQLException, ClassNotFoundException {
+    public OrderDetailDTO searchAll(String newValue) throws SQLException, ClassNotFoundException {
         return null;
     }
 

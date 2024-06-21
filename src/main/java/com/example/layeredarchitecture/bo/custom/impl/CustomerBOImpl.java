@@ -11,39 +11,34 @@ import java.util.ArrayList;
 public class CustomerBOImpl implements CustomerBO {
 
     CustomerDAO customerDAO = new CustomerDAOImpl();
-
-    @Override
-    public ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException{
+    public ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException {
         return customerDAO.loadAll();
     }
 
-    @Override
-    public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException{
+    public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return customerDAO.save(dto);
     }
 
-    @Override
-    public boolean exist(String id) throws SQLException, ClassNotFoundException{
-        return customerDAO.exist(id);
-    }
-
-    @Override
-    public boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException{
+    public boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return customerDAO.update(dto);
     }
 
-    @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException{
-        return customerDAO.delete(id);
+    public void delete(String id) throws SQLException, ClassNotFoundException {
+
+        customerDAO.delete(id);
     }
 
-    @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException{
+    public String generateNewId() throws SQLException, ClassNotFoundException {
         return customerDAO.generateNewId();
     }
 
-    @Override
-    public CustomerDTO search(String newValue) throws SQLException, ClassNotFoundException{
-        return customerDAO.search(newValue);
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.exist(id);
     }
+
+    public CustomerDTO searchAll(String newValue) throws SQLException, ClassNotFoundException {
+
+        return customerDAO.searchAll(newValue);
+    }
+
 }

@@ -112,12 +112,12 @@ public class PlaceOrderFormController {
                     /*Search Customer*/
 
                     try {
-                        if (!customerBO.exist(newValue + "")) {
+                        if (!existCustomer(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
 
-                        CustomerDTO customerDTO =customerBO.search(newValue);
+                        CustomerDTO customerDTO =customerBO.searchAll(newValue);
 
                         if (customerDTO != null) {
                             txtCustomerName.setText(customerDTO.getName());
@@ -145,11 +145,11 @@ public class PlaceOrderFormController {
 
                 //Find Item
                 try {
-                    if (!itemBO.exist(newItemCode + "")) {
+                    if (!existItem(newItemCode + "")) {
                         //throw new NotFoundException("There is no such item associated with the id " + code);
                     }
 
-                    ItemDTO itemDTO = itemBO.search(newItemCode);
+                    ItemDTO itemDTO = itemBO.searchAll(newItemCode);
 
                     txtDescription.setText(itemDTO.getDescription());
                     txtUnitPrice.setText(itemDTO.getUnitPrice().setScale(2).toString());
@@ -191,6 +191,14 @@ public class PlaceOrderFormController {
 
         loadAllCustomerIds();
         loadAllItemCodes();
+    }
+
+    private boolean existItem(String code) throws SQLException, ClassNotFoundException {
+        return placeOrderBO.exist(code);
+    }
+
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+        return placeOrderBO.exist(id);
     }
 
     public String generateNewOrderId() {
@@ -379,7 +387,7 @@ public class PlaceOrderFormController {
     public ItemDTO findItem(String code) {
         try {
             ItemDAOImpl itemDAOImpl = new ItemDAOImpl();
-            ItemDTO itemDTOS = itemDAOImpl.search(code);
+            ItemDTO itemDTOS = itemDAOImpl.searchAll(code);
             return itemDTOS;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);

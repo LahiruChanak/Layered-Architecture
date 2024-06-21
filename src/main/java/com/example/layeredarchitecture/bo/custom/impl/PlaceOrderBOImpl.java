@@ -9,43 +9,30 @@ import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
 
+    @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
         return orderDAO.generateNewId();
     }
 
-    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        return orderDAO.save(dto);
-    }
-
-    public boolean save(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
-        return orderDetailDAO.save(dto);
-    }
-
+    @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
         return orderDAO.exist(orderId);
     }
 
-    public OrderDTO search(String newValue) throws SQLException, ClassNotFoundException {
-        return orderDAO.search(newValue);
+    @Override
+    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return orderDAO.save(dto);
     }
 
-    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        return orderDAO.update(dto);
-    }
-
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return orderDAO.delete(id);
-    }
-
-    public ArrayList<OrderDTO> loadAll() throws SQLException, ClassNotFoundException {
-        return orderDAO.loadAll();
+    @Override
+    public boolean save(OrderDetailDTO orderDetails) throws SQLException, ClassNotFoundException {
+        return orderDetailDAO.save(orderDetails);
     }
 
 }

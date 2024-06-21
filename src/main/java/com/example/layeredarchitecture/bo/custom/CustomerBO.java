@@ -11,14 +11,14 @@ public interface CustomerBO {
 
     boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean exist(String id) throws SQLException, ClassNotFoundException;
-
     boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean delete(String id) throws SQLException, ClassNotFoundException;
+    void delete(String id) throws SQLException, ClassNotFoundException;
 
     String generateNewId() throws SQLException, ClassNotFoundException;
 
-    CustomerDTO search(String newValue) throws SQLException, ClassNotFoundException;
+    boolean exist(String id) throws SQLException, ClassNotFoundException;
+
+    CustomerDTO searchAll(String newValue) throws SQLException, ClassNotFoundException;
 
 }
