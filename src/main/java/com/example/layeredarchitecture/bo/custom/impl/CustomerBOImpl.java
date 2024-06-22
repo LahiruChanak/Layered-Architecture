@@ -10,33 +10,34 @@ import java.util.ArrayList;
 
 public class CustomerBOImpl implements CustomerBO {
 
-    CustomerDAO customerDAO = new CustomerDAOImpl();
-    public ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException {
+    CustomerDAO customerDAO = new CustomerDAOImpl();    //Property Injection
+
+    public ArrayList<CustomerDTO> loadAllCustomers() throws SQLException, ClassNotFoundException {
         return customerDAO.loadAll();
     }
 
-    public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return customerDAO.save(dto);
     }
 
-    public boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return customerDAO.update(dto);
     }
 
-    public void delete(String id) throws SQLException, ClassNotFoundException {
+    public void deleteCustomer(String id) throws SQLException, ClassNotFoundException {
 
         customerDAO.delete(id);
     }
 
-    public String generateNewId() throws SQLException, ClassNotFoundException {
+    public String generateNewCustomerId() throws SQLException, ClassNotFoundException {
         return customerDAO.generateNewId();
     }
 
-    public boolean exist(String id) throws SQLException, ClassNotFoundException {
+    public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
         return customerDAO.exist(id);
     }
 
-    public CustomerDTO searchAll(String newValue) throws SQLException, ClassNotFoundException {
+    public CustomerDTO searchAllCustomers(String newValue) throws SQLException, ClassNotFoundException {
 
         return customerDAO.searchAll(newValue);
     }

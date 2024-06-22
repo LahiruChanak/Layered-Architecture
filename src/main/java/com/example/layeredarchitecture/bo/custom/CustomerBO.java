@@ -7,18 +7,18 @@ import java.util.ArrayList;
 
 public interface CustomerBO {
 
-    ArrayList<CustomerDTO> loadAll() throws SQLException, ClassNotFoundException;
+    ArrayList<CustomerDTO> loadAllCustomers() throws SQLException, ClassNotFoundException;
 
-    boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException;
+    boolean saveCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException;
+    boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException;
 
-    void delete(String id) throws SQLException, ClassNotFoundException;
+    void deleteCustomer(String id) throws SQLException, ClassNotFoundException;
 
-    String generateNewId() throws SQLException, ClassNotFoundException;
+    String generateNewCustomerId() throws SQLException, ClassNotFoundException;
 
-    boolean exist(String id) throws SQLException, ClassNotFoundException;
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException;
 
-    CustomerDTO searchAll(String newValue) throws SQLException, ClassNotFoundException;
+    CustomerDTO searchAllCustomers(String newValue) throws SQLException, ClassNotFoundException;
 
 }

@@ -10,33 +10,33 @@ import java.util.ArrayList;
 
 public class ItemBOImpl implements ItemBO {
 
-    ItemDAO itemDAO = new ItemDAOImpl() ;
+    ItemDAO itemDAO = new ItemDAOImpl() ;   //Property Injection
 
-    public ArrayList<ItemDTO> loadAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<ItemDTO> loadAllItems() throws SQLException, ClassNotFoundException {
         return itemDAO.loadAll();
     }
 
-    public void delete(String code) throws SQLException, ClassNotFoundException {
+    public void deleteItem(String code) throws SQLException, ClassNotFoundException {
         itemDAO.delete(code);
     }
 
-    public boolean save(ItemDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveItem(ItemDTO dto) throws SQLException, ClassNotFoundException {
         return itemDAO.save(dto);
     }
 
-    public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateItem(ItemDTO dto) throws SQLException, ClassNotFoundException {
         return itemDAO.update(dto);
     }
 
-    public boolean exist(String code) throws SQLException, ClassNotFoundException {
+    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
         return itemDAO.exist(code);
     }
 
-    public String generateNewId () throws SQLException, ClassNotFoundException {
+    public String generateNewItemId () throws SQLException, ClassNotFoundException {
         return itemDAO.generateNewId();
     }
 
-    public ItemDTO searchAll(String newItemCode) throws SQLException, ClassNotFoundException {
+    public ItemDTO searchAllItems(String newItemCode) throws SQLException, ClassNotFoundException {
         return itemDAO.searchAll(newItemCode);
     }
 

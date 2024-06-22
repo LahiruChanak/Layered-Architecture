@@ -12,8 +12,8 @@ import java.sql.SQLException;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
 
-    OrderDAO orderDAO = new OrderDAOImpl();
-    OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+    OrderDAO orderDAO = new OrderDAOImpl(); //Property Injection
+    OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();   //Property Injection
 
     @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
@@ -21,17 +21,17 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     }
 
     @Override
-    public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
+    public boolean existOrder(String orderId) throws SQLException, ClassNotFoundException {
         return orderDAO.exist(orderId);
     }
 
     @Override
-    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
         return orderDAO.save(dto);
     }
 
     @Override
-    public boolean save(OrderDetailDTO orderDetails) throws SQLException, ClassNotFoundException {
+    public boolean saveOrderDetail(OrderDetailDTO orderDetails) throws SQLException, ClassNotFoundException {
         return orderDetailDAO.save(orderDetails);
     }
 

@@ -9,10 +9,10 @@ public interface PlaceOrderBO {
 
     String generateNewId() throws SQLException, ClassNotFoundException;
 
-    boolean exist(String orderId) throws SQLException, ClassNotFoundException;
+    boolean existOrder(String orderId) throws SQLException, ClassNotFoundException;
 
-    boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException;
+    boolean saveOrder(OrderDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean save(OrderDetailDTO orderDetails ) throws SQLException, ClassNotFoundException;
+    boolean saveOrderDetail(OrderDetailDTO orderDetails ) throws SQLException, ClassNotFoundException;
 
 }

@@ -6,12 +6,6 @@ import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
 import com.example.layeredarchitecture.bo.custom.impl.CustomerBOImpl;
 import com.example.layeredarchitecture.bo.custom.impl.ItemBOImpl;
 import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDAOImpl;
-import com.example.layeredarchitecture.dao.custom.OrderDAO;
-import com.example.layeredarchitecture.dao.custom.OrderDetailDAO;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -42,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 
 public class PlaceOrderFormController {
@@ -123,7 +116,7 @@ public class PlaceOrderFormController {
                         ResultSet rst = pstm.executeQuery();
                         rst.next();
                         CustomerDTO customerDTO = new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));*/
-                        CustomerDTO customerDTO = customerBO.searchAll(newValue);
+                        CustomerDTO customerDTO = customerBO.searchAllCustomers(newValue);
 
                         txtCustomerName.setText(customerDTO.getName());
                     } catch (SQLException e) {
@@ -159,7 +152,7 @@ public class PlaceOrderFormController {
                     rst.next();
                     ItemDTO item = new ItemDTO(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));*/
 
-                    ItemDTO item = itemBO.searchAll(newItemCode);
+                    ItemDTO item = itemBO.searchAllItems(newItemCode);
 
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
@@ -204,11 +197,11 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        return itemBO.exist(code);
+        return itemBO.existItem(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        return  customerBO.exist(id);
+        return  customerBO.existCustomer(id);
     }
 
     public String generateNewOrderId() {
@@ -224,7 +217,7 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            ArrayList<CustomerDTO> customerDTOS =customerBO.loadAll();
+            ArrayList<CustomerDTO> customerDTOS =customerBO.loadAllCustomers();
 
             for (CustomerDTO customerDTO : customerDTOS){
                 cmbCustomerId.getItems().add(customerDTO.getId());
@@ -240,7 +233,7 @@ public class PlaceOrderFormController {
     private void loadAllItemCodes() {
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> itemDTOS =itemBO.loadAll();
+            ArrayList<ItemDTO> itemDTOS =itemBO.loadAllItems();
             for (ItemDTO itemDTO : itemDTOS){
                 cmbItemCode.getItems().add(itemDTO.getCode());
             }
@@ -342,19 +335,19 @@ public class PlaceOrderFormController {
         try {
             Connection connection = DBConnection.getDbConnection().getConnection();
 
-            boolean b1 =placeOrderBO.exist(orderId);
+            boolean b1 =placeOrderBO.existOrder(orderId);
             if (b1){
                 return false;
             }
             connection.setAutoCommit(false);
-            boolean b2 = placeOrderBO.save(new OrderDTO(orderId, orderDate, customerId));
+            boolean b2 = placeOrderBO.saveOrder(new OrderDTO(orderId, orderDate, customerId));
             if (!b2) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
             }
             for (OrderDetailDTO  detail : orderDetails){
-                boolean isOrderDetailSaved = placeOrderBO.save(detail);
+                boolean isOrderDetailSaved = placeOrderBO.saveOrderDetail(detail);
                 if (!isOrderDetailSaved) {
                     connection.rollback();
                     connection.setAutoCommit(true);
@@ -366,7 +359,7 @@ public class PlaceOrderFormController {
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
-                boolean isItemUpdated = itemBO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
+                boolean isItemUpdated = itemBO.updateItem(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
                 if (!isItemUpdated) {
                     connection.rollback();
                     connection.setAutoCommit(true);
@@ -389,7 +382,7 @@ public class PlaceOrderFormController {
 
     public ItemDTO findItem(String code) {
         try {
-            return itemBO.searchAll(code);
+            return itemBO.searchAllItems(code);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);
         } catch (ClassNotFoundException e) {
